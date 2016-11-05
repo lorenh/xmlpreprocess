@@ -1,0 +1,10 @@
+Settings,Defaults,Local,Test,Integration,Production
+,,,,,
+#some values,,,,,
+Setting1,setting1default,,,,
+Setting2,setting2default,,,,
+Setting3,setting3default,,,,
+,,,,,
+#some other values,,,,,
+Setting4,"setting4,default",localhost,testserver,intgserver,prodserver
+Setting5,,${Setting1},"${Setting1}",${Setting1},${Setting1}

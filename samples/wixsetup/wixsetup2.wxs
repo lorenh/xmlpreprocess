@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+  <Product Id="20c1d609-996e-499c-9ad6-ebdee3ef5e50" Name="XMLPreprocess Sample2" Language="1033" Version="1.0.0" Manufacturer="XMLPreprocess" UpgradeCode="20c1d609-996f-499c-9ad6-ebdee3ef5e50">
+	
+	<Package Id="*" Description="Sample showing XMLPreprocess used in a WiX setup." Comments="Sample showing XMLPreprocess used in a WiX setup." InstallerVersion="200" Compressed="yes" />
+
+	<Media Id="1" Cabinet="Product.cab" EmbedCab="yes" />
+
+	<Directory Id="TARGETDIR" Name="SourceDir">
+	  <Directory Id="ProgramFilesFolder">
+		<Directory Id="INSTALLDIR" Name="XMLPreprocess WiX Sample2">
+			<Component Id="ProgramComponent" Guid="*">
+				<File Id="sample.config" Name="sample.config" Source="sample.config" Vital="yes" DiskId="1"/>
+			</Component>
+			<Component Id="SettingsSpreadsheetComponent" Guid="*">
+				<File Id="SettingsSpreadsheet.xml" Name="SettingsSpreadsheet.xml" Source="SettingsSpreadsheet.xml" Vital="yes" DiskId="1"/>
+			</Component>
+			<Component Id="XmlPreprocessComponent" Guid="*">
+				<File Id="XmlPreprocess.exe" Name="XmlPreprocess.exe" Source="..\..\bin\XmlPreprocess.exe" Vital="yes" DiskId="1"/>
+			</Component>
+		</Directory>
+	  </Directory>
+	</Directory>
+
+	<CustomAction Id="ConfigureApp_Cmd" Property="ConfigureApp" Execute="immediate"
+		Value="&quot;[INSTALLDIR]XmlPreprocess.exe&quot; /nologo /i:&quot;[INSTALLDIR]*.config&quot; /x:&quot;[INSTALLDIR]SettingsSpreadsheet.xml&quot; /e:&quot;[ENVIRONMENT]&quot;" />
+	<CustomAction Id="ConfigureApp"
+		BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="check" Impersonate="no"/>
+
+	<InstallExecuteSequence>
+		<Custom Action="ConfigureApp_Cmd" After="StartServices"><![CDATA[NOT(Installed) AND (ENVIRONMENT <> "") AND (ENVIRONMENT <> "(none)")]]></Custom>
+		<Custom Action="ConfigureApp" After="ConfigureApp_Cmd"><![CDATA[NOT(Installed) AND (ENVIRONMENT <> "") AND (ENVIRONMENT <> "(none)")]]></Custom>
+	</InstallExecuteSequence>
+
+	<Feature Id="Complete" Title="XMLPreprocess Sample2" Level="1">
+	  <ComponentRef Id="ProgramComponent" />
+	  <ComponentRef Id="SettingsSpreadsheetComponent" />
+	  <ComponentRef Id="XmlPreprocessComponent" />
+	</Feature>
+
+  </Product>
+</Wix>

@@ -1,0 +1,20 @@
+<configuration>
+  <!-- Note: this is a brute-force way to do things, but using properties is probably better -->
+
+  <!-- #ifdef development -->
+  <entry foo="development_value"/>
+  <!-- #endif -->
+
+  <!-- #ifdef testing -->
+  <!-- <entry foo="testing_value"/> -->
+  <!-- #endif -->
+
+  <!-- #ifdef integration -->
+  <!-- <entry foo="integration_value"/> -->
+  <!-- #endif -->
+
+  <!-- #ifdef production -->
+  <!-- <entry foo="production_value"/> -->
+  <!-- #endif -->
+
+</configuration>

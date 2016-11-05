@@ -1,0 +1,11 @@
+<configuration>
+
+  <!-- #ifdef _xml_preprocess -->
+  <!--
+  <entry foo="${Setting4}"/>
+  -->
+  <!-- #else -->
+  <entry foo="development_value"/>
+  <!-- #endif -->
+
+</configuration>

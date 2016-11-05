@@ -1,0 +1,5 @@
+<settings>
+  <property name="Setting1">setting1default</property>
+  <!-- This is a comment -->
+  <property name="Setting2">setting2default</property>
+</settings>

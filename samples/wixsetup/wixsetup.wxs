@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <Product Id="9E2B0BA8-E684-40b4-8A14-2273A412C11A" Name="XMLPreprocess Sample" Language="1033" Version="1.0.0" Manufacturer="XMLPreprocess" UpgradeCode="c8df662f-eed7-43e1-9e3c-8fe7a6ba3395">
+    <Package Id="*" Description="Sample showing XMLPreprocess used in a WiX setup." Comments="Sample showing XMLPreprocess used in a WiX setup." InstallerVersion="200" Compressed="yes" />
+
+    <Media Id="1" Cabinet="Product.cab" EmbedCab="yes" />
+    
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLLOCATION" Name="XMLPreprocess WiX Sample">
+            <Component Id="ProgramComponent" Guid="*">
+              <File Id="sample.config" Name="sample.config" Source="sample.config" Vital="yes" DiskId="1"/>
+            </Component>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <Feature Id="Complete" Title="XMLPreprocess Sample" Level="1">
+      <ComponentRef Id="ProgramComponent" />
+    </Feature>
+
+    <CustomAction Id="SAMPLE_CONFIG" BinaryKey="XMLPREPROCESS" ExeCommand="/i:&quot;[INSTALLLOCATION]sample.config&quot; /o:&quot;[INSTALLLOCATION]sample2.config&quot; /d:ServiceLocation=[SERVICELOCATION]" Execute="deferred" />
+    <Binary Id="XMLPREPROCESS" SourceFile="..\..\bin\XmlPreprocess.exe" />
+    <InstallExecuteSequence>
+      <Custom Action="SAMPLE_CONFIG" After="StartServices"><![CDATA[NOT Installed]]></Custom>
+    </InstallExecuteSequence>
+
+  </Product>
+</Wix>

@@ -1,0 +1,15 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+    DefaultTargets="ValidateConfiguration">
+
+    <Target Name="ValidateConfiguration">
+
+        <Exec Command="..\..\bin\XmlPreprocess.exe /l /x SettingsSpreadsheet.xml > Environments.txt"/>
+
+        <ReadLinesFromFile File="Environments.txt" >
+            <Output TaskParameter="Lines" ItemName="EnvironmentItem"/>
+        </ReadLinesFromFile>
+
+        <Message Text="%(EnvironmentItem.identity)"/>
+    </Target>
+</Project>
+

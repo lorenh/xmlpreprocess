@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- This file was generated on 12/12/2004 4:24:10 PM by SettingsFileGenerator.xls. Do not edit directly. -->
+<settings>
+
+  <!-- Enter Comments in the spreadsheet to annotate the properties -->
+  <property name="myproperty">integration_value</property>
+</settings>

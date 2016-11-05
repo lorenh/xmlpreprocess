@@ -1,0 +1,1555 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>XmlPreprocess</name>
+    </assembly>
+    <members>
+        <member name="T:XmlPreprocess.DataSources.BinarySpreadsheetFileReader">
+            <summary>
+            Reads a binary Excel workbook file (Office 2003 format or older).
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.BinarySpreadsheetFileReader.ReadSettings(XmlPreprocess.DataSource,XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Read the settings from a binary Excel XLS file into a DataTable.
+            </summary>
+            <param name="dataSource">The settings data source.</param>
+            <param name="context">The preprocessing context.</param>
+            <returns></returns>
+        </member>
+        <member name="T:XmlPreprocess.DataSources.CsvSpreadsheetFileReader">
+            <summary>
+            Reads a CSV file
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.CsvSpreadsheetFileReader.ReadSettings(XmlPreprocess.DataSource,XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Read the settings from a CSV file into a DataTable.
+            </summary>
+            <param name="dataSource">The settings data source.</param>
+            <param name="context">The preprocessing context.</param>
+            <returns></returns>
+        </member>
+        <member name="T:XmlPreprocess.DataSources.CustomReader">
+             <summary>
+             Dynamically invoke a custom settings reader, passing the name of a temp file
+             the process simply needs to write CSV values into the temp file supplied
+             XML Preprocessor will read the values from the CSV file and delete
+             the temp file.
+            
+             The placeholder in command line to use is "${tempFile}"
+             Example:
+              xmlpreprocess /i app.config /cx "powershell.exe -command CustomScript.ps1 -tempFile ${tempFile}"
+             </summary>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.CustomReader.ReadSettings(XmlPreprocess.DataSource,XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Read the settings from a custom source
+            </summary>
+            <param name="dataSource">The settings data source.</param>
+            <param name="context">The preprocessing context.</param>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.CustomReader.ParseArguments(System.String,System.String@,System.String@)">
+            <summary>
+            Separate executable from arguments
+            </summary>
+            <param name="fullCommandLine">combined command line</param>
+            <param name="fileName">name of executable</param>
+            <param name="arguments">arguments</param>
+            <returns></returns>
+        </member>
+        <member name="T:XmlPreprocess.DataSources.IConfigSettingsReader">
+            <summary>
+            Defines a Configuration settings reader
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.IConfigSettingsReader.ReadSettings(XmlPreprocess.DataSource,XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Reads the settings into a DataTable
+            </summary>
+            <param name="dataSource">The settings data source.</param>
+            <param name="context">The preprocessing context.</param>
+            <returns>The settings in DataTable form</returns>
+        </member>
+        <member name="T:XmlPreprocess.DataSources.SqlDatabaseReader">
+            <summary>
+            Reads settings from database
+            </summary>
+        </member>
+        <member name="T:XmlPreprocess.DataSources.SqlDatabaseReader.SqlSettings">
+            <summary>
+            Used to temporarily store values while reading from db
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.SqlDatabaseReader.ReadSettings(XmlPreprocess.DataSource,XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Read the settings from a database into a DataTable.
+            </summary>
+            <param name="dataSource">The settings data source.</param>
+            <param name="context">The preprocessing context.</param>
+            <returns></returns>
+        </member>
+        <member name="T:XmlPreprocess.DataSources.SettingsLoader">
+            <summary>
+            Read settings from an Excel spreadsheet
+            </summary>
+        </member>
+        <member name="P:XmlPreprocess.DataSources.SettingsLoader.Context">
+            <summary>
+            Preprocessing context
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.SettingsLoader.#ctor(XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XmlPreprocess.DataSources.SettingsLoader"/> class.
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.SettingsLoader.GetEnvironmentsFromDataTable(System.Data.DataTable)">
+            <summary>
+            Gets the environments from data table.
+            </summary>
+            <param name="settingsTable">The settings table.</param>
+            <returns>list of strings containing the environment names</returns>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.SettingsLoader.GetEnvironments(XmlPreprocess.DataSource)">
+            <summary>
+            Gets the environments.
+            </summary>
+            <param name="source">The settings source.</param>
+            <returns>list of strings containing the environment names</returns>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.SettingsLoader.LoadDataTableFromDataSource(XmlPreprocess.DataSource)">
+            <summary>
+            Read the contents of the Settings worksheet in the specified Excel file into a DataTable.
+            Excel files up to Excel 2000 and XML Spreadsheet 2003 files are both supported.
+            </summary>
+            <param name="dataSource">Path to the source (file or db connection)</param>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.SettingsLoader.LoadSettingsFromDataSource(XmlPreprocess.DataSource,XmlPreprocess.PreprocessingProperties,System.String)">
+            <summary>
+            Read the contents of the Settings worksheet in the specified Excel file into a DataTable.
+            Excel files up to Excel 2000 and XML Spreadsheet 2003 files are both supported.
+            </summary>
+            <param name="source">Data Source</param>
+            <param name="properties">Properties to load</param>
+            <param name="environmentName">Name of environment to load</param>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.SettingsLoader.LoadSettingsFromDataTable(System.Data.DataTable,XmlPreprocess.PreprocessingProperties,System.String)">
+            <summary>
+            Export the settings contained in a DataTable to multiple XML files, one per declared environment.
+            </summary>
+            <param name="settingsTable">DataTable containing settings values</param>
+            <param name="properties">Properties dictionary to load</param>
+            <param name="environmentName">Environment name to load</param>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.SettingsLoader.FindEnvironmentColumnIndex(System.Data.DataTable,System.String)">
+            <summary>
+            Finds the index of the environment column.
+            </summary>
+            <param name="settingsTable">The settings table.</param>
+            <param name="environmentName">Name of the environment.</param>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.SettingsLoader.FindSettingRowIndex(System.Data.DataTable,System.String,XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Finds the index of the row containing the desired setting.
+            </summary>
+            <param name="settingsTable">The settings table.</param>
+            <param name="settingNameToFind">Name of the setting to find.</param>
+            <param name="context">Preprocessing context.</param>
+            <returns>row index of setting, or -1 if not found</returns>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.SettingsLoader.GetSettingValue(System.Data.DataTable,System.Int32,System.Int32)">
+            <summary>
+            Safely get a value for an environment setting. If no value is specified, try to get the default value. Otherwise, return
+            an empty string.
+            </summary>
+            <param name="settingsTable">DataTable containing the setting values</param>
+            <param name="rowIndex">Row index of the cell</param>
+            <param name="columnIndex">Column index of the cell</param>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.SettingsLoader.GetCellValue(System.Data.DataTable,System.Int32,System.Int32)">
+            <summary>
+            Gets the cell value.
+            </summary>
+            <param name="settingsTable">The settings table.</param>
+            <param name="rowIndex">Index of the row.</param>
+            <param name="columnIndex">Index of the column.</param>
+            <returns></returns>
+        </member>
+        <member name="T:XmlPreprocess.DataSources.XmlSpreadsheetFileReader">
+            <summary>
+            Reads a SpreadsheetML XML file (Office 2003 format or older).
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.XmlSpreadsheetFileReader.ReadSettings(XmlPreprocess.DataSource,XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Read the settings from Office 2003 SpreadsheetML XML file into a DataTable.
+            </summary>
+            <param name="dataSource">The settings data source.</param>
+            <param name="context">The preprocessing context.</param>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.DataSources.XmlSpreadsheetFileReader.IsValidSpreadsheetMl(System.Xml.XPath.XPathNavigator)">
+            <summary>
+            Check for a valid Excel mso-application processing instruction.
+            </summary>
+            <param name="nav"></param>
+            <returns></returns>
+        </member>
+        <member name="T:XmlPreprocess.DataSourceType">
+            <summary>
+            Specifies the type of data source
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.DataSourceType.Spreadsheet">
+            <summary>
+            Spreadsheet (XML, XSL, CSV)
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.DataSourceType.Database">
+            <summary>
+            Database source
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.DataSourceType.Custom">
+            <summary>
+            Custom source
+            </summary>
+        </member>
+        <member name="T:XmlPreprocess.DataSourceSpreadsheetFormat">
+            <summary>
+            Specifies the type of data source
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.DataSourceSpreadsheetFormat.None">
+            <summary>
+            None
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.DataSourceSpreadsheetFormat.Unknown">
+            <summary>
+            Unknown
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.DataSourceSpreadsheetFormat.Xml">
+            <summary>
+            Spreadsheet
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.DataSourceSpreadsheetFormat.Xls">
+            <summary>
+            Excel
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.DataSourceSpreadsheetFormat.Csv">
+            <summary>
+            Comma Separated Value
+            </summary>
+        </member>
+        <member name="T:XmlPreprocess.DataSource">
+            <summary>
+            A source of settings
+            </summary>
+        </member>
+        <member name="P:XmlPreprocess.DataSource.Path">
+            <summary>
+            Source information
+            </summary>
+        </member>
+        <member name="P:XmlPreprocess.DataSource.SourceType">
+            <summary>
+            Type of source
+            </summary>
+        </member>
+        <member name="P:XmlPreprocess.DataSource.SpreadsheetFormat">
+            <summary>
+            Type of spreadsheet
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.DataSource.#ctor(System.String,XmlPreprocess.DataSourceType,XmlPreprocess.DataSourceSpreadsheetFormat)">
+            <summary>
+            Create a data source
+            </summary>
+            <param name="path">path or connection string</param>
+            <param name="sourceType">type of data source</param>
+            <param name="spreadsheetFormat">the format if it is a spreadsheet</param>
+        </member>
+        <member name="M:XmlPreprocess.DataSource.#ctor(System.String,XmlPreprocess.DataSourceType)">
+            <summary>
+            Create a data source
+            </summary>
+            <param name="path">path or connection string</param>
+            <param name="sourceType">type of data source</param>
+        </member>
+        <member name="P:XmlPreprocess.DataSource.Exists">
+            <summary>
+            Does the data source exist (file types only)
+            </summary>
+        </member>
+        <member name="P:XmlPreprocess.DataSource.RequiresRowFixup">
+            <summary>
+            Does this data source need row fixups to be applied?
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.DataSource.ToString">
+            <summary>
+            Convert to string
+            </summary>
+            <returns>the Source</returns>
+        </member>
+        <member name="T:XmlPreprocess.CommandLine">
+            <summary>
+            A command line parser from the Genghis library.
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.FIRST_VALUE_ROW_DEFAULT">
+            <summary>
+            First value row default
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.input">
+            <summary>
+            Path to the input file.
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.output">
+            <summary>
+            Path to output file
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.settings">
+            <summary>
+            Path to settings files
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.define">
+            <summary>
+            Properties to define.
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.clean">
+            <summary>
+            Clean switch, if this is passed, preprocessor markup comments will be removed.
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.quiet">
+            <summary>
+            Quiet switch, if this is passed, processor will not prompt for missing settings files.
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.validate">
+            <summary>
+            Validate all, return an error and halt execution if any substitution settings are undefined
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.validateSettingsExist">
+            <summary>
+            Validate settings, return an error and halt execution if any substitution settings are undefined
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.validateXmlWellFormed">
+            <summary>
+            Validate XML is well formed, return an error and halt execution if the output document isn't well formed
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.fixFalse">
+            <summary>
+            Do not use the value of "False" to undefine settings (instead use "#undef")
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.environment">
+            <summary>
+            Environment column to use if settings files are Spreadsheet format
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.spreadsheet">
+            <summary>
+            Path to spreadsheet format settings files
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.database">
+            <summary>
+            Connection string for database
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.custom">
+            <summary>
+            Connection string for database
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.list">
+            <summary>
+            Environment column to use if settings files are Spreadsheet format
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.property">
+            <summary>
+            Name of property to output to console
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.delimiters">
+            <summary>
+            Name of property to output to console
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.environmentRow">
+            <summary>
+            Row index of environment name in input spreadsheet
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.firstValueRow">
+            <summary>
+            Row index of first value in input spreadsheet
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.settingNameCol">
+            <summary>
+            Column index of setting names in input spreadsheet
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.defaultValueCol">
+            <summary>
+            Column index of default values in input spreadsheet
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.environmentFile">
+            <summary>
+            Prompt for environment only
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.noDirectives">
+            <summary>
+            No markup
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.tokenStart">
+            <summary>
+            Token Start
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.tokenEnd">
+            <summary>
+            Token End
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.countReportFile">
+            <summary>
+            Report property usage counts
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.CommandLine.noLogo">
+            <summary>
+            Nologo switch, if this is passed, the logo will not be output to the console.
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.CommandLine.CreatePreprocessingContext">
+            <summary>
+            Creates the preprocessing context.
+            </summary>
+            <returns>A new preprocessing context</returns>
+        </member>
+        <member name="M:XmlPreprocess.CommandLine.DetermineSpreadsheetFormat(System.String)">
+            <summary>
+            Try to determine the format of the spreadsheet
+            </summary>
+            <param name="spreadsheetFile">The path to the spreadsheet</param>
+            <returns>The type</returns>
+        </member>
+        <member name="M:XmlPreprocess.CommandLine.NormalizeAllFileArrays">
+            <summary>
+            Splits files that may be semicolon delimited, make sure
+            to call this before using the input or output arrays
+            </summary>
+            <remarks>
+            This just allows a little more flexibility in how the 
+            inputs and outputs are passed, you can pass them 
+            with multiple /i f1 /i f2 /i f3 .. parameters or
+            semicolon delimit (a la MSBuild) them with one
+            parameter like this /i f1;f2;f3, or a combination
+            /i f1 /i f2;f3 etc.
+            </remarks>
+        </member>
+        <member name="M:XmlPreprocess.CommandLine.NormalizeFileArray(System.Collections.ArrayList)">
+            <summary>
+            Splits files that may be semicolon delimited
+            </summary>
+            <param name="inList">The in list.</param>
+            <returns>The normalized list</returns>
+        </member>
+        <member name="M:XmlPreprocess.CommandLine.ExpandFileWildcards(System.Collections.ArrayList)">
+            <summary>
+            Expands wildcards
+            </summary>
+            <param name="inList">The in list.</param>
+            <returns>The expand list</returns>
+        </member>
+        <member name="M:XmlPreprocess.CommandLine.ValidateArguments">
+            <summary>
+            Validates the arguments.
+            </summary>
+            <returns>true if everything is OK, false if there was an error</returns>
+        </member>
+        <member name="T:XmlPreprocess.ErrorCode">
+            <summary>
+            Possible Error codes
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.ErrorCode.ErrorException">
+            <summary>
+            An exception ocurred
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.ErrorCode.ErrorFileNotFound">
+            <summary>
+            File not found
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.ErrorCode.ErrorMissingToken">
+            <summary>
+            Missing Token
+            </summary>
+        </member>
+        <member name="F:XmlPreprocess.ErrorCode.ErrorNotWellFormed">
+            <summary>
+            Not well-formed
+            </summary>
+        </member>
+        <member name="T:XmlPreprocess.ErrorInfo">
+            <summary>
+            Holds errors that need to be conveyed to the user
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.ErrorInfo.#ctor(XmlPreprocess.ErrorCode,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XmlPreprocess.ErrorInfo"/> class.
+            </summary>
+            <param name="errorNumber">The error number.</param>
+            <param name="inputFile">The file.</param>
+        </member>
+        <member name="P:XmlPreprocess.ErrorInfo.Message">
+            <summary>
+            Gets or sets the message.
+            </summary>
+            <value>The message.</value>
+        </member>
+        <member name="P:XmlPreprocess.ErrorInfo.ErrorCode">
+            <summary>
+            Gets or sets the error number.
+            </summary>
+            <value>The error number.</value>
+        </member>
+        <member name="P:XmlPreprocess.ErrorInfo.InputFile">
+            <summary>
+            Gets or sets the file.
+            </summary>
+            <value>The file.</value>
+        </member>
+        <member name="M:XmlPreprocess.ErrorInfo.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            </summary>
+            <returns>
+            A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            </returns>
+        </member>
+        <member name="T:XmlPreprocess.Util.ConsoleUtils">
+            <summary>
+            Writes colored lines to the console
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.Util.ConsoleUtils.WriteLine(System.ConsoleColor,System.String)">
+            <summary>
+            Writes colored lines to the console
+            </summary>
+            <param name="color">The color.</param>
+            <param name="text">The text.</param>
+        </member>
+        <member name="M:XmlPreprocess.Util.ConsoleUtils.Write(System.ConsoleColor,System.String)">
+            <summary>
+            Writes colored lines to the console
+            </summary>
+            <param name="color">The color.</param>
+            <param name="text">The text.</param>
+        </member>
+        <member name="T:XmlPreprocess.Util.CsvFileReader">
+            <summary>
+            Class to read data from a CSV file
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.Util.CsvFileReader.#ctor(System.IO.TextReader)">
+            <summary>
+            Construct a CSV reader 
+            </summary>
+            <param name="reader">TextReader containing CSV</param>
+        </member>
+        <member name="M:XmlPreprocess.Util.CsvFileReader.#ctor(System.IO.TextReader,System.String)">
+            <summary>
+            Construct a CSV reader 
+            </summary>
+            <param name="reader">TextReader containing CSV</param>
+            <param name="commentPrefix">lines prefixed with this string will be ignored</param>
+        </member>
+        <member name="M:XmlPreprocess.Util.CsvFileReader.ReadRow">
+            <summary>
+            Reads a row of data from a CSV file
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.Util.CsvFileReader.GetValue(System.String,System.Int32@)">
+            <summary>
+            Get a single value at the specified offset index, includes
+            special processing for quoted values according to the CSV
+            convention
+            </summary>
+            <param name="line"></param>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="T:XmlPreprocess.Util.DirectoryScanner">
+            <summary>
+            This class enables the use of wildcards to specify files to preprocess.
+            </summary>
+            
+            <example>
+             DirectoryScanner scanner = new DirectoryScanner();
+             scanner.Includes.Add("*.config");
+             scanner.Scan();
+             foreach (string filename in scanner.FileNames)
+             {
+                 Console.WriteLine(filename);
+             }
+            </example>
+            
+            <remarks>
+            It would be ideal to plug in the DirectoryScanner class from NAnt
+            https://github.com/nant/nant/tree/master/src/NAnt.Core, which would also
+            enable recursive patters such as "**\*.config" but as I read it,
+            the GPL library that NAnt is released under is incompatible with MS-PL
+            license that XmlPreprocess is released under.  So for now, in the interest
+            of keeping things simple, this class simply scans a single directory.
+            </remarks>
+        </member>
+        <member name="P:XmlPreprocess.Util.DirectoryScanner.Includes">
+            <summary>
+            The file specifications for which to scan (ex: "temp\*.config")
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.Util.DirectoryScanner.#ctor">
+            <summary>
+            Construct an instance of a DirectoryScanner
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.Util.DirectoryScanner.Scan">
+            <summary>
+            Scan the includes for all matching files
+            </summary>
+        </member>
+        <member name="P:XmlPreprocess.Util.DirectoryScanner.FileNames">
+            <summary>
+            The resulting file names after the scan is completed (calls Scan() if it wasn't called yet)
+            </summary>
+        </member>
+        <member name="T:XmlPreprocess.Util.IDynamicResolver">
+            <summary>
+            Performs a replacement in the document
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.Util.IDynamicResolver.Replace(System.String,System.String)">
+            <summary>
+            Replaces the specified buffer.
+            </summary>
+            <param name="buffer">The buffer.</param>
+            <param name="value">The value.</param>
+            <returns>The buffer with the replacement made</returns>
+        </member>
+        <member name="M:XmlPreprocess.Util.IDynamicResolver.ShouldProcess(System.String)">
+            <summary>
+            Should process this file?
+            </summary>
+            <param name="fileNameBeingProcessed">The file name being processed.</param>
+            <returns>True if this file should be processed</returns>
+        </member>
+        <member name="T:XmlPreprocess.Util.DynamicBindingExpression">
+            <summary>
+            Represents a dynamically bound property.
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.Util.DynamicBindingExpression.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XmlPreprocess.Util.DynamicBindingExpression"/> class.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="files">The files.</param>
+        </member>
+        <member name="P:XmlPreprocess.Util.DynamicBindingExpression.FileSpec">
+            <summary>
+            Gets or sets the file spec.
+            </summary>
+            <value>The file spec.</value>
+        </member>
+        <member name="P:XmlPreprocess.Util.DynamicBindingExpression.BindingPath">
+            <summary>
+            Gets or sets the binding path.
+            </summary>
+            <value>The binding path.</value>
+        </member>
+        <member name="M:XmlPreprocess.Util.DynamicBindingExpression.ShouldProcess(System.String)">
+            <summary>
+            Shoulds the file be processed.
+            </summary>
+            <remarks>
+            http://www.codeproject.com/KB/recipes/wildcardtoregex.aspx
+            </remarks>
+            <param name="fileNameBeingProcessed">The file.</param>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.Util.DynamicBindingExpression.Parse(XmlPreprocess.PreprocessingContext,System.String)">
+            <summary>
+            Parses the specified binding value.
+            </summary>
+            <param name="context">The preprocessing context.</param>
+            <param name="bindingExpression">The binding value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.Util.DynamicBindingExpression.ParseFilesAndPath(System.String,System.String@,System.String@)">
+            <summary>
+            Parse the files and path out of the binding expression
+            </summary>
+            <param name="bindingValue">The binding value.</param>
+            <param name="files">The files.</param>
+            <param name="path">The path.</param>
+        </member>
+        <member name="M:XmlPreprocess.Util.DynamicBindingExpression.Replace(System.String,System.String)">
+            <summary>
+            Performs the replacement in the specified file.
+            </summary>
+            <param name="buffer">The buffer.</param>
+            <param name="value">The value.</param>
+            <returns>the modified buffer</returns>
+        </member>
+        <member name="T:XmlPreprocess.Util.XPathBinding">
+            <summary>
+            An XPath dynamic binding
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.Util.XPathBinding.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XmlPreprocess.Util.XPathBinding"/> class.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="files">The files.</param>
+        </member>
+        <member name="M:XmlPreprocess.Util.XPathBinding.Replace(System.String,System.String)">
+            <summary>
+            Replaces the specified file name.
+            </summary>
+            <param name="buffer">The buffer.</param>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.Util.XPathBinding.PrettyPrint(System.Xml.XmlDocument,System.String)">
+            <summary>
+            Pretties the print.
+            </summary>
+            <param name="doc">The doc.</param>
+            <param name="buffer">The buffer.</param>
+            <returns></returns>
+        </member>
+        <member name="T:XmlPreprocess.Util.RegexBinding">
+            <summary>
+            A Regular Expression dynamic binding
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.Util.RegexBinding.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XmlPreprocess.Util.RegexBinding"/> class.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="files">The files.</param>
+        </member>
+        <member name="M:XmlPreprocess.Util.RegexBinding.Replace(System.String,System.String)">
+            <summary>
+            Replaces the specified file name.
+            </summary>
+            <param name="buffer">The buffer.</param>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
+        <member name="T:XmlPreprocess.Util.DynamicEvaluator">
+            <summary>
+            Compiles an expression of C# code and executes it, resolving to a string. Used to
+            enable more complex scripting expressions to be embedded in property values
+            </summary>
+            <example>
+            ${Script= Property("val1")=="abc" ? "yes" : Property("val3")}
+            </example>
+        </member>
+        <member name="M:XmlPreprocess.Util.DynamicEvaluator.EvaluateToString(XmlPreprocess.PreprocessingContext,System.String)">
+            <summary>
+            Evaluates the provided C# expression
+            </summary>
+            <param name="context">The preprocessing context.</param>
+            <param name="input">The input.</param>
+            <returns>The expression resolved to a single string</returns>
+        </member>
+        <member name="M:XmlPreprocess.Util.DynamicEvaluator.EvaluateToBool(XmlPreprocess.PreprocessingContext,System.String)">
+            <summary>
+            Evaluates the provided C# expression
+            </summary>
+            <param name="context">The preprocessing context.</param>
+            <param name="input">The input.</param>
+            <returns>The expression resolved to a single string</returns>
+        </member>
+        <member name="M:XmlPreprocess.Util.DynamicEvaluator.CompileAssembly(System.String)">
+            <summary>
+            Compiles the c# into an assembly if there are no syntax errors
+            </summary>
+            <returns>The CompilerResults object for the compiled code</returns>
+        </member>
+        <member name="M:XmlPreprocess.Util.DynamicEvaluator.RunStringEvaluation(XmlPreprocess.PreprocessingContext,System.CodeDom.Compiler.CompilerResults)">
+            <summary>
+            Runs the code.
+            </summary>
+            <param name="context">The preprocessing context.</param>
+            <param name="results">The results.</param>
+            <returns>The expression resolved to a single string.</returns>
+        </member>
+        <member name="M:XmlPreprocess.Util.DynamicEvaluator.RunBoolEvaluation(XmlPreprocess.PreprocessingContext,System.CodeDom.Compiler.CompilerResults)">
+            <summary>
+            Runs the code.
+            </summary>
+            <param name="context">The preprocessing context.</param>
+            <param name="results">The results.</param>
+            <returns>The expression resolved to a single string.</returns>
+        </member>
+        <member name="T:XmlPreprocess.Util.RegistryEvaluator">
+            <summary>
+            Retrieves a value from the registry
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.Util.RegistryEvaluator.GetValue(System.String)">
+            <summary>
+            Retrieves a value from the registry
+            </summary>
+            <param name="registryPath"></param>
+            <returns>the value at the requested path, or null if it didn't exist</returns>
+        </member>
+        <member name="T:XmlPreprocess.Util.FileUtils">
+            <summary>
+            Collection of file utilities
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.Util.FileUtils.LoadFile(System.String)">
+            <summary>
+            Load a file into a string.
+            </summary>
+            <param name="path">Path to file.</param>
+            <returns>Contents of file as a string.</returns>
+        </member>
+        <member name="M:XmlPreprocess.Util.FileUtils.WriteFile(System.String,System.String)">
+            <summary>
+            Write a string to a file.
+            </summary>
+            <param name="path">Path to the file.</param>
+            <param name="content">Contents of file.</param>
+        </member>
+        <member name="M:XmlPreprocess.Util.FileUtils.IsHttpUrl(System.String)">
+            <summary>
+            Check to see if a path is an HTTP URL
+            </summary>
+            <param name="path">path to examine</param>
+            <returns>True if path starts with "http:"</returns>
+        </member>
+        <member name="M:XmlPreprocess.Util.FileUtils.DownloadFile(System.String)">
+            <summary>
+            Download a file given a URL
+            </summary>
+            <param name="url">url to the file</param>
+            <returns>The contents of the file</returns>
+        </member>
+        <member name="T:XmlPreprocess.PreprocessingContext">
+            <summary>
+            Class that handles all of the state necessary for a preprocessing session
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingContext.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XmlPreprocess.PreprocessingContext"/> class.
+            </summary>
+            <param name="fixFalse">if set to <c>true</c> fix false.</param>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.TokenStart">
+            <summary>
+            Sequence of characters that indicate the start of a token
+            </summary>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.TokenEnd">
+            <summary>
+            Sequence of characters that indicate the end of a token
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingContext.EscapeToken(System.String)">
+            <summary>
+            Escape a token
+            </summary>
+            <param name="token">the non-escaped token</param>
+            <returns>the escaped token</returns>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.TokenStartEscaped">
+            <summary>
+            Sequence of characters that indicate the start of an escaped token
+            </summary>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.TokenEndEscaped">
+            <summary>
+            Sequence of characters that indicate the end of an escaped token
+            </summary>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.SourceFile">
+            <summary>
+            Gets or sets the source file.
+            </summary>
+            <value>The source file.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.DestinationFile">
+            <summary>
+            Gets or sets the destination file.
+            </summary>
+            <value>The destination file.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.SettingsFiles">
+            <summary>
+            Gets or sets the settings files.
+            </summary>
+            <value>The settings files.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.PreserveMarkup">
+            <summary>
+            Gets or sets a value indicating whether [preserve markup].
+            </summary>
+            <value><c>true</c> if [preserve markup]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.QuietMode">
+            <summary>
+            Gets or sets a value indicating whether [quiet mode].
+            </summary>
+            <value><c>true</c> if [quiet mode]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.ValidateSettingsExist">
+            <summary>
+            Gets or sets a value indicating whether to validate settings exist
+            </summary>
+            <value>
+            	<c>true</c> if validate settings exist; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.ValidateXmlWellFormed">
+            <summary>
+            Gets or sets a value indicating whether to validate XML well formed
+            </summary>
+            <value>
+            	<c>true</c> if validate XML well formed; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.Errors">
+            <summary>
+            Gets the errors.
+            </summary>
+            <value>The errors.</value>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingContext.IsDynamicProperty(System.String)">
+            <summary>
+            Returns whether this property is a dynamic property or not
+            </summary>
+            <param name="propertyName">the property to test</param>
+            <returns>True if it is a dynamic property</returns>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingContext.ResolveContent(System.String)">
+            <summary>
+            Resolve content
+            </summary>
+            <param name="content"></param>
+            <returns></returns>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.Properties">
+            <summary>
+            Gets the properties.
+            </summary>
+            <value>The properties.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.DataSources">
+            <summary>
+            Gets or sets the data sources.
+            </summary>
+            <value>The data sources.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.List">
+            <summary>
+            Gets or sets a value indicating whether [quiet mode].
+            </summary>
+            <value><c>true</c> if [quiet mode]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.PropertyToExtract">
+            <summary>
+            Gets or sets the name of the property to output to the console
+            </summary>
+            <value>The name of the property to output to the console</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.Delimiters">
+            <summary>
+            Gets or sets the delimiter characters to use to split a compound property value into multiple lines,
+            used in conjunction with PropertyToExtract
+            </summary>
+            <value>The delimiter characters</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.FixFalse">
+            <summary>
+            Gets or sets a value indicating whether [fix false].
+            </summary>
+            <value><c>true</c> if [fix false]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.EnvironmentName">
+            <summary>
+            Gets or sets the name of the environment.
+            </summary>
+            <value>The name of the environment.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.EnvironmentNameRowIndex">
+            <summary>
+            Gets or sets the index of the environment name row.
+            </summary>
+            <value>The index of the environment name row.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.FirstValueRowIndex">
+            <summary>
+            Gets or sets the first index of the value row.
+            </summary>
+            <value>The first index of the value row.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.SettingNameColumnIndex">
+            <summary>
+            Gets or sets the index of the setting name column.
+            </summary>
+            <value>The index of the setting name column.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.DefaultValueColumnIndex">
+            <summary>
+            Gets or sets the default index of the value column.
+            </summary>
+            <value>The default index of the value column.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.NoDirectives">
+            <summary>
+            Gets or sets whether to use directives or not
+            </summary>
+            <value>False if directives are required, True if they are not</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingContext.CountUsage">
+            <summary>
+            Gets or sets a value indicating whether to count usage.
+            </summary>
+            <value>
+              <c>true</c> if count usage; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingContext.AddBuiltInProperties">
+            <summary>
+            Add some built-in properties
+            </summary>
+        </member>
+        <member name="T:XmlPreprocess.PreprocessingProperty">
+            <summary>
+            Represents a property
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingProperty.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XmlPreprocess.PreprocessingProperty"/> class.
+            </summary>
+            <param name="key">The key.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingProperty.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+            <value>The key.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingProperty.Value">
+            <summary>
+            Gets or sets the value.
+            </summary>
+            <value>The value.</value>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingProperty.UseCount">
+            <summary>
+            Gets or sets the use count.
+            </summary>
+            <value>
+            The use count.
+            </value>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingProperty.GetDynamicResolver(XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Gets the dynamic resolver.
+            </summary>
+            <param name="context">The preeprocessing context.</param> 
+            <returns></returns>
+        </member>
+        <member name="T:XmlPreprocess.PreprocessingProperties">
+            <summary>
+            Properties container
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingProperties.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XmlPreprocess.PreprocessingProperties"/> class.
+            </summary>
+            <param name="fixFalse">if set to <c>true</c> [fix false].</param>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingProperties.ReadFromFile(System.String,System.String)">
+             <summary>
+             Read an XML properties file
+             </summary>
+            
+             <remarks>
+             <para>
+             Property file is in the following format (the element names don't matter, just the "name" attributes)
+             </para>
+             <code>
+             <![CDATA[
+             <settings>
+              <property name="INSTALLER">TRUE</property>
+             </settings>
+             ]]>
+             </code>
+             Or optionally, you can include environments
+             <code>
+             <![CDATA[
+             <settings>
+               <property name="Setting4">
+                 <environment name="Default">setting4default</environment>
+                 <environment name="Local">localhost</environment>
+                 <environment name="Test">testserver</environment>
+                 <environment name="Integration">intgserver</environment>
+                 <environment name="Production">prodserver</environment>
+               </property>
+             </settings>
+             ]]>
+             </code>
+             </remarks>
+            
+             <param name="file">name of property file</param>
+             <param name="environmentName">name of environment (optional)</param>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingProperties.GetEnumerator">
+            <summary>
+            Gets the enumerator.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingProperties.ContainsKey(System.String)">
+            <summary>
+            Determines whether the specified key contains key.
+            </summary>
+            <param name="key">The key.</param>
+            <returns>
+            	<c>true</c> if the specified key contains key; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingProperties.Item(System.String)">
+            <summary>
+            Gets the <see cref="T:XmlPreprocess.PreprocessingProperty"/> with the specified key. Case insensitive.
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingProperties.Remove(System.String)">
+            <summary>
+            Removes the specified key.
+            </summary>
+            <param name="key">The key.</param>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingProperties.Add(System.String,System.String)">
+            <summary>
+            Adds the property with protection from already exists exception.
+            </summary>
+            <param name="key">The key.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="P:XmlPreprocess.PreprocessingProperties.Count">
+            <summary>
+            Gets the count.
+            </summary>
+            <value>The count.</value>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingProperties.AddPropertiesFromArrayList(XmlPreprocess.PreprocessingContext,System.Collections.ArrayList)">
+            <summary>
+            Parse any command line properties, allowing them
+            to override the file base ones
+            </summary>
+            <param name="context">Preprocessing context</param>
+            <param name="array">ArrayList read from command line</param>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingProperties.RemoveQuotes(System.String)">
+            <summary>
+            Remove quotes from a string
+            </summary>
+            <param name="propertyValue">string to remove quotes from.</param>
+            <returns>string value with quotes removed</returns>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingProperties.LoadFromDataSource(XmlPreprocess.DataSource,XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Reads from spreadsheet.
+            </summary>
+            <param name="source">The settings source.</param>
+            <param name="context">the context.</param>
+        </member>
+        <member name="M:XmlPreprocess.PreprocessingProperties.ResolveContent(XmlPreprocess.PreprocessingContext,System.String)">
+            <summary>
+            Resolves content that could possibly contain macros
+            </summary>
+            <param name="context">The preprocessing context.</param>
+            <param name="content">The content that could contain macros.</param>
+            <exception cref="T:XmlPreprocess.UndefinedSettingException">Throws this exception if it encounters an undefined setting</exception>
+            <returns>the resolved content</returns>
+        </member>
+        <member name="T:XmlPreprocess.UndefinedSettingException">
+            <summary>
+            Exception thrown in the case of referencing an undefined setting
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.UndefinedSettingException.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XmlPreprocess.UndefinedSettingException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="settingName">The setting name.</param>
+        </member>
+        <member name="P:XmlPreprocess.UndefinedSettingException.SettingName">
+            <summary>
+            Gets or sets the undefined setting name
+            </summary>
+            <value>The setting name.</value>
+        </member>
+        <member name="T:XmlPreprocess.XmlPreprocessor">
+             <summary>
+             Simple XML file preprocesser.
+             </summary>
+            
+             <remarks>
+             <para>
+             <b>Built-In properties</b>
+             </para>
+             <para>
+             These properties can be referred to within the XML file.
+             </para>
+             <list type="table">
+             <listheader>
+               <term>Property Name</term>
+               <description>Description</description>
+             </listheader>
+             <item>
+               <term>_xml_preprocess</term>
+               <description>implicit property automatically defined whenever running under the xml preprocessor</description>
+             </item>
+             <item>
+               <term>_dest_dir</term>
+               <description>Directory portion of destination file. Example: d:\inetpub\wwwroot\myweb</description>
+             </item>
+             <item>
+               <term>_machine_name</term>
+               <description>Name of machine. Example: vmspap02caa</description>
+             </item>
+             <item>
+               <term>_machine_id</term>
+               <description>Numeric portion of machine name. Example: 02</description>
+             </item>
+             <item>
+               <term>_os_platform</term>
+               <description>Machine OS platform. Example: Win32NT</description>
+             </item>
+             <item>
+               <term>_os_version</term>
+               <description>Machine OS version. Example: 5.1.2600.0</description>
+             </item>
+             <item>
+               <term>_system_dir</term>
+               <description>Machine's system directory. Example: C:\WINNT\System32</description>
+             </item>
+             <item>
+               <term>_current_dir</term>
+               <description>Machine's current directory. Example: "C:\Installs</description>
+             </item>
+             <item>
+               <term>_clr_version</term>
+               <description>Gets the major, minor, build, and revision numbers of the common language runtime. Example: 1.0.3705.288</description>
+             </item>
+             <item>
+               <term>_user_name</term>
+               <description>Gets the user name of the person who started the current thread. Example: EFudd</description>
+             </item>
+             <item>
+               <term>_user_domain_name</term>
+               <description>Gets the network domain name associated with the current user. Example: MyDomain</description>
+             </item>
+             <item>
+               <term>_user_interactive</term>
+               <description>Gets a value indicating whether the current process is running in user interactive mode. Example: True</description>
+             </item>
+             <item>
+               <term>_system_date</term>
+               <description>System date. Example: 8/5/2003</description>
+             </item>
+             <item>
+               <term>_system_time</term>
+               <description>System time. Example: 9:50 AM</description>
+             </item>
+             <item>
+               <term>_framework_dir</term>
+               <description>.NET Framework directory. Example: C:\WINNT\Microsoft.NET\Framework\v1.0.3705</description>
+             </item>
+             <item>
+               <term>_env_*</term>
+               <description>Environment variables. Example: _ENV_PATH contains system's path environment variable.</description>
+             </item>
+             </list>
+            
+             <b>Version History</b>
+             <list type="table">
+             <listheader>
+               <term>Date</term>
+               <description>Changes</description>
+             </listheader>
+             <item>
+               <term>2003-07-30</term>
+               <description>LH: Initial release</description>
+             </item>
+             <item>
+               <term>2003-08-01</term>
+               <description>
+                  LH: Enhanced match patterns so whitespace around macro comments does
+                  not get rendered. Made search algoritm more robust with some limited
+                  error checking for mismatched ifdef/endif). Fixed issue that else's
+                  and endif's were being searched for globally instead of only within
+                  the body of a single ifdef/endif pair.
+               </description>
+             </item>
+             <item>
+               <term>2003-08-05</term>
+               <description>
+                  LH: Added several useful built-in properties.
+               </description>
+             </item>
+             <item>
+               <term>2003-09-12</term>
+               <description>
+                  LH: Removed case sensitivity. Made macro resolution
+                  recursive (one macro can contain another...as long
+                  as it is not circular).
+               </description>
+             </item>
+             </list>
+             </remarks>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.#ctor">
+            <summary>
+            Construct an instance of the XmlPreprocessor class
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.Preprocess(XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Deploy an XML file using preprocessor.
+            </summary>
+            <param name="context">Preprocessing Context</param>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.ExtractDefines(XmlPreprocess.PreprocessingContext,System.String)">
+            <summary>
+            Extracts the #defines from the document
+            </summary>
+            <param name="context">The Preprocessing context.</param>
+            <param name="content">The content.</param>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.ProcessIncludes(XmlPreprocess.PreprocessingContext,System.String)">
+            <summary>
+            Processes the #includes
+            </summary>
+            <param name="context">The Preprocessing context.</param>
+            <param name="content">The content.</param>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.GetXmlContentFromIncludeFile(System.String,System.String)">
+            <summary>
+            Gets the XML content from include file.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+            <param name="bindingPath">The binding path.</param>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.Process(XmlPreprocess.PreprocessingContext,System.String)">
+            <summary>
+            Process the file.
+            </summary>
+            <param name="context">The preprocessing context.</param>
+            <param name="content">Contents of a file as a string.</param>
+            <returns>Returns the file contents with preprocessing applied.</returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.ProcessDynamicallyBoundProperties(XmlPreprocess.PreprocessingContext,System.String)">
+            <summary>
+            Processes the dynamically bound properties.
+            </summary>
+            <remarks>
+            This is a fairly inefficient implementation for the first cut, it would be
+            nicer if a buffer could be reused to avoid reallocating huge strings for
+            every single property, especially in the case of XML.
+            </remarks>
+            <param name="context">The Preprocessing context.</param>
+            <param name="content">The content.</param>
+            <returns>The buffer with any dynamically bound properties replaced</returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.ProcessBody(XmlPreprocess.PreprocessingContext,System.String,System.String,System.String)">
+            <summary>
+            Process the body of a macro expression.
+            </summary>
+            <param name="context">The preprocessing context.</param>
+            <param name="keyword">Keyword (#if or #ifdef).</param>
+            <param name="condition">Condition to test.</param>
+            <param name="body">Body of macro expression.</param>
+            <returns>Returns the preprocessed result of the macro expression.</returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.RemoveComment(System.String,System.Boolean)">
+            <summary>
+            Remove XML comments from a section of content.
+            </summary>
+            <param name="content">Content from which to remove comments.</param>
+            <param name="replaceNestedComments">Should nested comments be replaced.</param>
+            <returns>Content without comments.</returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.RemoveMacro(XmlPreprocess.PreprocessingContext,System.String)">
+            <summary>
+            Remove macro braces (example: ${...}) from a section of content.
+            </summary>
+            <param name="context">The preprocessing context.</param>
+            <param name="content">The content from which to remove the macro braces.</param>
+            <returns>Content without macro braces.</returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.ResolveProperties(System.String,XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Replace any macros with their property value.
+            </summary>
+            <param name="content">Content in which to replace all macros.</param>
+            <param name="context">The preprocessing context.</param>
+            <returns>The content with macros replaced with corresponding property values.</returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.ExtractForEachProperties(System.String,XmlPreprocess.PreprocessingContext,System.Int32@)">
+            <summary>
+            Extracts for each properties.
+            </summary>
+            <param name="compoundValueNames">The compound value names.</param>
+            <param name="context">The context.</param>
+            <param name="maxCount">The max count.</param>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.ResolveProperties(System.String,XmlPreprocess.PreprocessingContext,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Replace any macros with their property value.
+            </summary>
+            <param name="content">Content in which to replace all macros.</param>
+            <param name="context">The preprocessing context.</param>
+            <param name="overriddenValues">The value to insert.</param>
+            <returns>The content with macros replaced with corresponding property values.</returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.CountOccurrences(System.String,System.String)">
+            <summary>
+            Counts the occurrences.
+            </summary>
+            <param name="inputString">The input string.</param>
+            <param name="checkString">The check string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessor.ResolveExpression(System.String,XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Resolves an expression
+            </summary>
+            <param name="expression">The function.</param>
+            <param name="context">The preprocessing context.</param>
+            <returns>The resulting value</returns>
+        </member>
+        <member name="T:XmlPreprocess.XmlPreprocessorMain">
+            <summary>
+            Command line class for the XML file preprocessor.
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessorMain.Main(System.String[])">
+            <summary>
+            Run the XML file preprocessor from the command line
+            </summary>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessorMain.ReportUseCount(XmlPreprocess.CommandLine,XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Reports the use count.
+            </summary>
+            <param name="cl">The cl.</param>
+            <param name="context">The context.</param>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessorMain.ReportErrorsAndWarnings(System.Collections.Generic.List{XmlPreprocess.ErrorInfo})">
+            <summary>
+            Reports errors.
+            </summary>
+            <param name="errors">The errors collection.</param>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessorMain.DumpEnvironments(XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Dumps the environment names from the data source to the console.
+            </summary>
+            <param name="context">The preprocessing context.</param>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessorMain.DumpProperty(XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Dumps an individual property from the data source to the console.
+            </summary>
+            <param name="context">The preprocessing context.</param>
+            <returns></returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessorMain.ReadSettings(XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Reads the settings from files.
+            </summary>
+            <param name="context">The preprocessing context.</param>
+            <returns>Error code</returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessorMain.ReadEnvironmentSettingsFile(XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Loads settings from the environment settings files.
+            </summary>
+            <param name="context">The preprocessing context.</param>
+            <returns>Error code</returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessorMain.ReadSettingsFromDataSources(XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Reads the settings from data sources.
+            </summary>
+            <param name="context">The preprocessing context.</param>
+            <returns>Error code</returns>
+        </member>
+        <member name="M:XmlPreprocess.XmlPreprocessorMain.PromptForEnvironment(XmlPreprocess.DataSource,XmlPreprocess.PreprocessingContext)">
+            <summary>
+            Prompts for environment by looking into spreadsheet and listing them out
+            to the console.
+            </summary>
+            <param name="source">The data source.</param>
+            <param name="context">The preprocessing context.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Genghis.CommandLineParser.Parse(System.String[],System.Boolean)">
+            <summary>
+            Does the actual parsing. Good place to hook up for custom pre/post-parsing.
+            </summary>
+            <param name="args">array of arguments to parse</param>
+            <param name="ignoreFirstArg">whether to ignore first argument or not (it could be the name of the exe)</param>
+        </member>
+    </members>
+</doc>

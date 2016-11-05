@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="All">
+
+  <Import Project="$(MSBuildProjectDirectory)\properties\build.properties" />
+
+  <PropertyGroup>
+    <BuildPath Condition="'$(BuildPath)'==''">$(MSBuildProjectDirectory)</BuildPath>
+    <TasksPath Condition="'$(TasksPath)'==''">$(BuildPath)\bin\Debug</TasksPath>
+  </PropertyGroup>
+
+  <UsingTask AssemblyFile="$(TasksPath)\XmlPreprocess.MSBuildTasks.dll" TaskName="GetSpreadsheetValues" />
+  <UsingTask AssemblyFile="$(TasksPath)\XmlPreprocess.MSBuildTasks.dll" TaskName="XmlPreprocess" />
+
+  <Target Name="All" DependsOnTargets="GetValues;Preprocess" />
+
+
+  <Target Name="GetValues">
+
+    <GetSpreadsheetValues ToolPath="..\..\bin"
+                      SpreadsheetFile="..\XmlPreprocessUnitTests\SpreadsheetML.xml"
+                      Environment="Production"
+                      SettingName="Setting4">
+      <Output PropertyName="Setting4" TaskParameter="Values"/>
+    </GetSpreadsheetValues>
+    <Message Text="$(Setting4)"/>
+
+    <!--
+    Can also get collections of Items out of properties that are delimited with a delimiter
+    such as a semicolon in the following example the spreadsheet may contain a property like
+     Servers = "Server1;Server2;Server3"
+
+    <GetSpreadsheetValues ToolPath="..\..\bin"
+                          SpreadsheetFile="..\XmlPreprocessUnitTests\SpreadsheetML.xml"
+                          Environment="Production"
+                          SettingName="Servers">
+      <Output ItemName="Servers" TaskParameter="Values"/>
+    </GetSpreadsheetValues>
+    <Message Text="%(Servers.identity)"/>
+    -->
+
+  </Target>
+
+
+  <Target Name="Preprocess">
+
+    <XmlPreprocess
+      ToolPath="..\..\bin"
+      InputFiles="..\..\samples\spreadsheet\input.xml"
+      OutputFiles="bin\debug\input-msbuild.xml"
+      SpreadsheetFiles="..\..\samples\spreadsheet\SettingsSpreadsheet.xml"
+      Environment="Production"
+    />
+<!--
+    Examples of other parameters you can pass:
+      ToolPath="..\..\bin"
+      InputFiles="..\..\samples\spreadsheet\input.xml"
+      OutputFiles="bin\debug\input-msbuild.xml"
+      Environment="Production"
+      SpreadsheetFiles="..\..\samples\spreadsheet\SettingsSpreadsheet.xml"
+      SettingsFiles="../XmlPreprocessUnitTests/TestSettings.xml;../XmlPreprocessUnitTests/TestSettings3.xml"
+      Databases="Server=localhost%3BDatabase=ConfigSettings%3BTrusted_Connection=True%3B"
+      CustomDataSources="C:\\Windows\\System32\\WindowsPowershell\\v1.0\\powershell.exe -command ../XmlPreprocessUnitTests/CustomScript.ps1 -tempFile @tempFile@"
+      FixFalse="False"
+      Clean="True"
+      NoDirectives="True"
+      Validate="True"
+      ValidateSettingsExist="True"
+      ValidateXmlWellFormed="True"
+      Properties="Setting4=testsetting;Setting5=another"
+      EnvironmentRow="2"
+      FirstValueRow="7"
+      SettingNameCol="1"
+      DefaultValueCol="2"
+      TokenStart="${"
+      TokenEnd="}"
+      CountReportFile="bin\debug\counts.csv"
+-->
+  </Target>
+
+</Project>

@@ -1,0 +1,25 @@
+<settings>
+  <property name="Setting1">
+    <environment name="Default">setting1default</environment>
+  </property>
+  <property name="Setting2">
+    <environment name="Default">setting2default</environment>
+  </property>
+  <property name="Setting3">
+    <environment name="Default">setting3default</environment>
+  </property>
+  <property name="Setting4">
+    <environment name="Default">setting4default</environment>
+    <environment name="Local">localhost</environment>
+    <environment name="Test">testserver</environment>
+    <environment name="Integration">intgserver</environment>
+    <environment name="Production">prodserver</environment>
+  </property>
+  <property name="Setting5">
+    <environment name="Default">setting4default</environment>
+    <environment name="Local">${Setting1}</environment>
+    <environment name="Test">${Setting1}</environment>
+    <environment name="Integration">${Setting1}</environment>
+    <environment name="Production">${Setting1}</environment>
+  </property>  
+</settings>

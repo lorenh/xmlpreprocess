@@ -1,0 +1,26 @@
+<!-- just a demonstration to show that the element names don't really matter -->
+<foo>
+  <bar name="Setting1">
+    <baz name="Default">setting1default</baz>
+  </bar>
+  <bar name="Setting2">
+    <baz name="Default">setting2default</baz>
+  </bar>
+  <bar name="Setting3">
+    <baz name="Default">setting3default</baz>
+  </bar>
+  <bar name="Setting4">
+    <baz name="Default">setting4default</baz>
+    <baz name="Local">localhost</baz>
+    <baz name="Test">testserver</baz>
+    <baz name="Integration">intgserver</baz>
+    <baz name="Production">prodserver</baz>
+  </bar>
+  <bar name="Setting5">
+    <baz name="Default">setting4default</baz>
+    <baz name="Local">${Setting1}</baz>
+    <baz name="Test">${Setting1}</baz>
+    <baz name="Integration">${Setting1}</baz>
+    <baz name="Production">${Setting1}</baz>
+  </bar>
+</foo>

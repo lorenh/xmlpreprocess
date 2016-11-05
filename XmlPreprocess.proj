@@ -1,0 +1,67 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+    <!-- run .nuget\nuget.exe restore first -->
+    <UsingTask AssemblyFile="packages\MSBuildTasks.1.5.0.214\tools\MSBuild.Community.Tasks.dll" TaskName="MSBuild.Community.Tasks.Zip" />
+
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    </PropertyGroup>
+
+    <!-- Build -->
+    <Target Name="Build" DependsOnTargets="Compile;Publish;Test;CreateBinaryDistribution"/>
+
+    <!-- Compile -->
+    <Target Name="Compile">
+        <Exec Command=".nuget\nuget.exe restore" />
+        <MSBuild Projects="XmlPreprocess.sln" Properties="Configuration=$(Configuration)"/>        
+    </Target>
+
+    <!-- Clean -->
+    <Target Name="Clean">
+        <MSBuild Projects="XmlPreprocess.sln" Targets="Clean" Properties="Configuration=Debug"/>
+        <MSBuild Projects="XmlPreprocess.sln" Targets="Clean" Properties="Configuration=Release"/>
+    </Target>
+
+    <!-- Publish -->
+    <Target Name="Publish" DependsOnTargets="Compile">
+        <Copy SourceFiles="XmlPreprocess\bin\$(Configuration)\XmlPreprocess.exe"
+            DestinationFolder="bin"/>
+
+        <Copy SourceFiles="XmlPreprocess.MSBuildTasks\bin\$(Configuration)\XmlPreprocess.MSBuildTasks.dll"
+            DestinationFolder="bin"/>
+    </Target>    
+
+
+    <!-- Test -->
+    <Target Name="Test" DependsOnTargets="Publish">
+
+        <!--
+        Make sure you are using MSBuild.exe from .NET 3.5 
+        http://www.sedodream.com/PermaLink,guid,4571716d-c40b-4052-828f-ae2c23727e70.aspx
+        Using new attribute in 3.5 IgnoreStandardErrorWarningFormat
+        -->
+        <Exec
+            IgnoreStandardErrorWarningFormat="True"
+            Command="packages\NUnit.ConsoleRunner.3.5.0\tools\nunit3-console.exe &quot;XmlPreprocessUnitTests\bin\$(Configuration)\XmlPreprocessUnitTests.dll&quot; --x86"/>
+
+    </Target>
+
+    <!-- Release -->
+    <Target Name="CreateBinaryDistribution">
+
+        <ItemGroup>
+            <ZipFiles Include="License.txt" Exclude="" />
+            <ZipFiles Include="Readme.txt" Exclude="" />
+            <ZipFiles Include="bin\**\*.*" Exclude="" />
+            <ZipFiles Include="samples\**\*.*" Exclude="" />
+            <ZipFiles Include="docs\**\*.*" Exclude="" />
+        </ItemGroup>
+
+        <MakeDir Directories="build"/>
+
+        <Zip Files="@(ZipFiles)" ZipFileName="build\XmlPreprocessBinaries.zip" />
+
+    </Target>
+
+
+</Project>
