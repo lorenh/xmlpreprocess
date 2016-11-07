@@ -3564,6 +3564,7 @@ lines</entry>
 
         // ############################################################
         [Test]
+        [Ignore("Set up required")]
         public void SettingsFileUrlTest()
         {
             Console.WriteLine("** SettingsFileUrlTest **");
@@ -3642,6 +3643,7 @@ lines</entry>
         // ############################################################
 
         [Test]
+        [Ignore("Set up required")]
         public void SpreadsheetMLUrlTest()
         {
             Console.WriteLine("** SpreadsheetMLUrlTest **");
@@ -3681,6 +3683,7 @@ lines</entry>
         // ############################################################
 
         [Test]
+        [Ignore("Set up required")]
         public void CsvUrlTest()
         {
             Console.WriteLine("** CsvUrlTest **");
