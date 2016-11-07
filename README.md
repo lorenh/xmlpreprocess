@@ -119,7 +119,7 @@ Imagine your configuration file starts out looking like this. The development da
 
 2. Surround the configuration with preprocessor markup.
   
-  * Add #ifdef/#else/#endif comments around your original configuration.
+Add #ifdef/#else/#endif comments around your original configuration.
 ```xml
 <configuration>
   <!-- #ifdef _xml_preprocess -->
@@ -129,7 +129,7 @@ Imagine your configuration file starts out looking like this. The development da
   <!-- #endif -->
 </configuration>
 ```
-  * Insert placeholder tokens into the commented out #ifdef branch that match settings in your spreadsheet. Here is what it would look like completed:
+Insert placeholder tokens into the commented out #ifdef branch that match settings in your spreadsheet. Here is what it would look like completed:
 ```xml
 <configuration>
   <connectionStrings>
@@ -174,28 +174,28 @@ Imagine your configuration file starts out looking like this. The development da
 
 Any XmlPreprocess placeholder that begins with an underscore (ex: ${\_dest\_dir} ) is a "built-in" property. They should never be added to the environment Excel spreadsheet because they are dynamically expanded at deployment time by environmental values that are only known on the machine at that instant.
 
-For example \_dest\_dir can be used to allow the package to be deployed to any location. It gives the package location independence. One useful scenario is to enable developers to install an MSI locally even if the server destination is typically on the D: drive, and they only have a C: drive. As we move to multiple-instance (side-by-side) installs for Piloting this will become extremely important. _dest_dir gets substituted with the directory in which the config file is sitting.
+For example \_dest\_dir can be used to allow the package to be deployed to any location. _dest_dir gets substituted with the directory in which the config file is sitting, it gives the package location independence. One useful scenario is to enable developers to install an MSI locally even if the server destination is typically on the D: drive, and they only have a C: drive. 
 
 For example if the original web.config file has the following placeholder
 ```xml
-<add name="External File" type="Microsoft.Practices…." filePath="${_dest_dir}\entlibglobal.config" />
+<add name="External File" type="Microsoft.Practices..." filePath="${_dest_dir}\entlibglobal.config" />
 ```
 
 When the app is deployed to: D:\Inetpub\wwwroot\MyWeb
 
 The config file will contain:
 ```xml
-<add name="External File" type="Microsoft.Practices…." filePath="D:\Inetpub\wwwroot\MyWeb\entlibglobal.config" />
+<add name="External File" type="Microsoft.Practices..." filePath="D:\Inetpub\wwwroot\MyWeb\entlibglobal.config" />
 ```
 
 If it is deployed to: C:\Inetpub\websites\YourWeb
 
 The config file will contain:
 ```xml
-<add name="External File" type="Microsoft.Practices…." filePath="C:\Inetpub\websites\YourWeb\entlibglobal.config" />
+<add name="External File" type="Microsoft.Practices..." filePath="C:\Inetpub\websites\YourWeb\entlibglobal.config" />
 ```
 
-It's always good to remove hard-coded assumptions about where things are installed for 1) testing, 2) side-by-side installations (a.k.a. piloting)
+It's always a good idea to remove hard-coded assumptions about where things are installed for testing or side-by-side installations.
 
 Here is a complete list of the built-in properties
 
@@ -224,7 +224,7 @@ Here is a complete list of the built-in properties
 
 ## Incorporating into Build
 
-The Spreadsheet needs to be added to your source control, and included in your distribution package along with XmlPreprocess.exe.
+The Spreadsheet should be added to your source control, and included in your distribution package along with XmlPreprocess.exe.
 
 ### Spreadsheet Guidance
 
@@ -234,8 +234,6 @@ The Spreadsheet needs to be added to your source control, and included in your d
   * Spreadsheets should to correspond units of code that tend to ship together on similar timing or correspond to team organization.
 * **Be descriptive in your setting names** - Make it evident from a setting name what it does. Especially use care in choosing names in spreadsheets  that are shared among multiple projects.  Perhaps prefix the application name on settings unique to your application.
 * **Use Excel Formatting** - Feel free to use Excel formatting to make the settings easier to manager. For example cell comments, color, blank rows as separators, row headings  to group related settings together.
-* **Keep the spreadsheet outside of your branches** - Experience has shown that it works well to check in the spreadsheets in a shared location outside of your branches so that settings are universally applied.
-  * Particular care must be given to maintaining backward compatibility of your settings when you do this.
 * **Save spreadsheet in "XML Spreadsheet 2003" format** - This saves them in a text format (instead of binary) and makes it easier to see differences between versions in source control.
 
 ![Save as XML Spreadsheet 2003](docs/Xmlpreprocess-06.png)
@@ -244,25 +242,15 @@ The Spreadsheet needs to be added to your source control, and included in your d
 
 Add the following files to your installation package:
 * **XmlPreprocess.exe** - The preprocessor command line utility
-* **XmlPreprocess.exe.config** - The current version of XmlPreprocess.exe was compiled against .NET 2.0. This file is only needed if the destination machines do not have .NET 2.0 on them.  This file tells the .NET framework that it is OK to execute XmlPreprocess under .NET 4.0 instead.
 * **EnvironmentSettings.xml** - The environment settings spreadsheet (Note: filename can be different)
 * **config.bat** - By convention a batch file is included to actually run the preprocessing step, the custom action runs this batch file passing in the ENVIRONMENT argument.  This is not necessary if you wish to put the full command directly into the Custom action. But having a separate batch file makes it easier to test or reconfigure independently of running the installer.
 
-Tip: You may want to isolate the above 4 files into their own /config subdirectory and adjust paths accordingly to avoid cluttering up the root folder of your application
+Tip: You may want to isolate the above 3 files into their own /config subdirectory and adjust paths accordingly to avoid cluttering up the root folder of your application
 
 **--Example config.bat--**
 ```
 pushd %~dp0
 XmlPreprocess.exe /nologo /v /spreadsheet:EnvironmentSettings.xml /input:*.config /environment:"%~1"
-```
-
-**--XmlPreprocess.exe.config--**
-```xml
-<configuration>
-  <startup>
-    <supportedRuntime version="v4.0.30319"/>    
-  </startup>
-</configuration>
 ```
 
 **-- Sample Product.wxs--**
