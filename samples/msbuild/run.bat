@@ -1,1 +1,1 @@
-%windir%\Microsoft.NET\Framework\v2.0.50727\msbuild.exe Test.proj
+%windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe Test.proj
