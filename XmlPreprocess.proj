@@ -54,12 +54,13 @@
             <ZipFiles Include="Readme.txt" Exclude="" />
             <ZipFiles Include="bin\**\*.*" Exclude="" />
             <ZipFiles Include="samples\**\*.*" Exclude="" />
-            <ZipFiles Include="docs\**\*.*" Exclude="" />
         </ItemGroup>
 
         <MakeDir Directories="build"/>
 
-        <Zip Files="@(ZipFiles)" ZipFileName="build\XmlPreprocessBinaries.zip" />
+        <Zip Files="@(ZipFiles)"
+             WorkingDirectory="$(MSBuildProjectDirectory)" 
+             ZipFileName="build\XmlPreprocessBinaries.zip" />
 
     </Target>
 
