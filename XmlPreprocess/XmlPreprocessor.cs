@@ -632,30 +632,57 @@ namespace XmlPreprocess
                     content = content.Substring(0, match.Groups["foreachstart"].Index) +
                         content.Substring(foreachEndGroup.Index + foreachEndGroup.Length);
 
-                    // Get the values to expand
-                    int maxCount = 0;
-                    Dictionary<string, string[]> compoundValues =
-                        ExtractForEachProperties(nameGroup.Value, context, out maxCount);
-
-                    // Loop through the largest collection
                     string combinedContent = "";
-                    for (int i = 0; i < maxCount; i++)
+
+                    // if the foreach contains a prefix and wildcard,
+                    // (For example "SomePrefix*") handle it differently
+                    if (!string.IsNullOrWhiteSpace(nameGroup.Value) && 
+                        nameGroup.Value.Length > 0 && 
+                        nameGroup.Value.IndexOf(',') < 0 && 
+                        nameGroup.Value.EndsWith("*"))
                     {
-                        // values to override when resolving properties within repeated body
-                        Dictionary<string, string> overriddenValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-                        // override all looped properties
-                        foreach (string key in compoundValues.Keys)
+                        string prefix = nameGroup.Value.Substring(0, nameGroup.Value.Length - 1);
+                        foreach (PreprocessingProperty property in context.Properties)
                         {
-                            string overriddenValue = "";
-                            string[] values = compoundValues[key];
-                            if (values.Length > i)
-                                overriddenValue = values[i];
+                            if (property.Key.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                            {
+                                // values to override when resolving properties within repeated body
+                                Dictionary<string, string> overriddenValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-                            overriddenValues.Add(key, overriddenValue.Trim());
+                                overriddenValues.Add("_.Key", property.Key);
+                                overriddenValues.Add("_.KeyNoPrefix", property.Key.Substring(prefix.Length));
+                                overriddenValues.Add("_.Value", property.Value);
+
+                                combinedContent += ResolveProperties(content, context, overriddenValues);
+                            }
                         }
+                    }
+                    else
+                    {
+                        // Get the values to expand
+                        int maxCount = 0;
+                        Dictionary<string, string[]> compoundValues =
+                            ExtractForEachProperties(nameGroup.Value, context, out maxCount);
 
-                        combinedContent += ResolveProperties(content, context, overriddenValues);
+                        // Loop through the largest collection
+                        for (int i = 0; i < maxCount; i++)
+                        {
+                            // values to override when resolving properties within repeated body
+                            Dictionary<string, string> overriddenValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+                            // override all looped properties
+                            foreach (string key in compoundValues.Keys)
+                            {
+                                string overriddenValue = "";
+                                string[] values = compoundValues[key];
+                                if (values.Length > i)
+                                    overriddenValue = values[i];
+
+                                overriddenValues.Add(key, overriddenValue.Trim());
+                            }
+
+                            combinedContent += ResolveProperties(content, context, overriddenValues);
+                        }
                     }
 
                     return combinedContent;

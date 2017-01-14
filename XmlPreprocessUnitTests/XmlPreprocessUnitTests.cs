@@ -3308,6 +3308,50 @@ lines</entry>
 
         #endregion ForEachWithMultipleCommentLinesTest
 
+        #region ForEachWildcardTest
+
+        // ############################################################
+
+        [Test]
+        public void ForEachWildcardTest()
+        {
+            Console.WriteLine("** ForEachWildcardTest **");
+
+            string input =
+@"<xml>
+
+   <!-- #ifdef _xml_preprocess -->
+   <!-- #foreach(SomePrefix*) <add key1=""${_.Key}"" key2=""${_.KeyNoPrefix}"" value=""${_.Value}""/> -->
+   <!-- #else -->
+   <add key1=""SomePrefixOne"" key2=""One"" value=""One""/>
+   <!-- #endif -->
+
+</xml>";
+
+            string expected =
+@"<xml>
+
+   <!-- #ifdef _xml_preprocess -->
+   <!-- #foreach(SomePrefix*) <add key1=""${_.Key}"" key2=""${_.KeyNoPrefix}"" value=""${_.Value}""/> -->
+   <!-- #else -->
+   <add key1=""SomePrefixOne"" key2=""One"" value=""One""/>
+   <add key1=""SomePrefixTwo"" key2=""Two"" value=""Two""/>
+   <!-- #endif -->
+
+</xml>";
+
+            string inputFile = Path.Combine(_baseDir, "input.xml");
+            WriteFile(input, inputFile);
+
+            Run(new string[] { "/nologo", "/i", inputFile, "/d", "SomePrefixOne=One", "/d", "SomePrefixTwo=Two" });
+
+            string actual = ReadFile(inputFile);
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion ForEachWildcardTest
+
+
         #region MultipleFileTest
 
         // ############################################################
