@@ -55,12 +55,6 @@ namespace XmlPreprocess.DataSources
 
                 XPathNavigator nav = doc.CreateNavigator();
 
-                // Check the validity of the XML
-                if (!IsValidSpreadsheetMl(nav))
-                {
-                    throw new ArgumentException("The input file is not a valid SpreadsheetML file or it is an unsupported version.");
-                }
-
                 // Create a namespace manager and register the SpreadsheetML namespace and prefix
                 XmlNamespaceManager nm = new XmlNamespaceManager(nav.NameTable);
                 nm.AddNamespace("ss", "urn:schemas-microsoft-com:office:spreadsheet");
@@ -194,31 +188,6 @@ namespace XmlPreprocess.DataSources
             }
 
             return dt;
-        }
-
-        /// <summary>
-        /// Check for a valid Excel mso-application processing instruction.
-        /// </summary>
-        /// <param name="nav"></param>
-        /// <returns></returns>
-        private bool IsValidSpreadsheetMl(XPathNavigator nav)
-        {
-            bool isValid = false;
-
-            XPathNodeIterator piIterator = nav.SelectChildren(XPathNodeType.ProcessingInstruction);
-
-            while (piIterator.MoveNext())
-            {
-                if (string.Compare(piIterator.Current.LocalName, "mso-application", true) == 0)
-                {
-                    if (string.Compare(piIterator.Current.Value, "progid=\"Excel.Sheet\"", true) == 0)
-                    {
-                        isValid = true;
-                    }
-                }
-            }
-
-            return isValid;
         }
     }
 }
