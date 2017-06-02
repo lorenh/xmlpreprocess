@@ -28,7 +28,7 @@ using System.Runtime.CompilerServices;
 #endif
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("XmlPreprocess")]
-[assembly: AssemblyCopyright("Copyright (c) 2004-2016 Loren M Halvorson")]
+[assembly: AssemblyCopyright("Copyright (c) 2004-2017 Loren M Halvorson")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -43,8 +43,8 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("3.1.0.0")]
-[assembly: AssemblyFileVersion("3.1.0.0")]
+[assembly: AssemblyVersion("3.2.0.0")]
+[assembly: AssemblyFileVersion("3.2.0.0")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the
